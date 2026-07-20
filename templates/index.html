@@ -1,16 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>DataMind</title>
+
 </head>
 
 <body>
 
-    <h1>Welcome to DataMind 🚀</h1>
+    <h1>DataMind</h1>
 
-    <p>Your AI Data Analyst</p>
+    <h3>Your AI Data Analyst</h3>
+
+    <hr>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        <input
+            type="file"
+            name="dataset"
+            accept=".csv"
+            required>
+
+        <br><br>
+
+        <button type="submit">
+
+            Upload Dataset
+
+        </button>
+
+    </form>
+
+    {% if success %}
+
+        <h3>Dataset uploaded successfully!</h3>
+
+        <p>Rows : {{ rows }}</p>
+
+        <p>Columns : {{ columns }}</p>
+
+    {% endif %}
+
+    {% if error %}
+
+        <p>{{ error }}</p>
+
+    {% endif %}
 
 </body>
+
 </html>

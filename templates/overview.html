@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dataset Overview</title>
+</head>
+
+<body>
+
+    <h1>📊 Dataset Overview</h1>
+
+    <hr>
+
+    <h3>Dataset</h3>
+
+    <p>{{ filename }}</p>
+
+    <hr>
+
+    <h3>Basic Information</h3>
+
+    <p><strong>Rows:</strong> {{ overview.rows }}</p>
+
+    <p><strong>Columns:</strong> {{ overview.columns }}</p>
+
+    <p><strong>Memory Usage:</strong> {{ overview.memory_usage }} KB</p>
+
+    <hr>
+
+    <h3>Column Names</h3>
+
+    <ul>
+
+        {% for column in overview.column_names %}
+
+            <li>{{ column }}</li>
+
+        {% endfor %}
+
+    </ul>
+
+    <hr>
+
+    <h3>Data Types</h3>
+
+    <ul>
+
+        {% for column, datatype in overview.data_types.items() %}
+
+            <li>
+
+                {{ column }} : {{ datatype }}
+
+            </li>
+
+        {% endfor %}
+
+    </ul>
+
+    <hr>
+
+    <h3>First 5 Rows</h3>
+
+    {{ overview.preview | safe }}
+
+</body>
+
+</html>
