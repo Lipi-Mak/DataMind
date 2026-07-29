@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+
+{% block title %}
+Ask DataMind
+{% endblock %}
+
+{% block content %}
+
+<h2>Ask DataMind</h2>
+
+<p><strong>Dataset:</strong> {{ filename }}</p>
+
+<hr>
+
+<form method="POST">
+
+    <input
+        type="text"
+        name="question"
+        placeholder="Ask something about your dataset..."
+        value="{{ question }}"
+        style="width:500px;"
+        required
+    >
+
+    <!--
+        This field is empty for manually typed questions.
+
+        Suggested questions will fill this field with
+        a known operation so Ollama is not needed.
+    -->
+
+    <input
+        type="hidden"
+        name="suggested_operation"
+        id="suggested_operation"
+        value=""
+    >
+
+    <input
+        type="hidden"
+        name="suggested_column"
+        id="suggested_column"
+        value=""
+    >
+
+    <button type="submit">
+        Ask
+    </button>
+
+</form>
+
+
+<div class="suggested-questions">
+
+    <p>Try asking:</p>
+
+
+    <!-- ROW COUNT -->
+
+    <button
+        type="button"
+        onclick="askSuggestedQuestion(
+            'How many rows are there?',
+            'row_count',
+            'None'
+        )">
+
+        How many rows are there?
+
+    </button>
+
+
+    <!-- AVERAGE SALARY -->
+
+    <button
+        type="button"
+        onclick="askSuggestedQuestion(
+            'What is the average salary?',
+            'average',
+            'Salary'
+        )">
+
+        What is the average salary?
+
+    </button>
+
+
+    <!-- MOST COMMON DEPARTMENT -->
+
+    <button
+        type="button"
+        onclick="askSuggestedQuestion(
+            'Which department appears most often?',
+            'most_common',
+            'Department'
+        )">
+
+        Which department appears most often?
+
+    </button>
+
+
+    <!-- MISSING VALUES -->
+
+    <button
+        type="button"
+        onclick="askSuggestedQuestion(
+            'How many missing values are there?',
+            'missing_values',
+            'None'
+        )">
+
+        How many missing values are there?
+
+    </button>
+
+
+    <!-- UNIQUE DEPARTMENTS -->
+
+    <button
+        type="button"
+        onclick="askSuggestedQuestion(
+            'How many unique departments are there?',
+            'unique_count',
+            'Department'
+        )">
+
+        How many unique departments are there?
+
+    </button>
+
+</div>
+
+
+<hr>
+
+
+{% if error %}
+
+<div class="alert alert-warning">
+
+    {{ error }}
+
+</div>
+
+{% endif %}
+
+
+{% if answer %}
+
+<h3>Answer</h3>
+
+<p>{{ answer }}</p>
+
+{% endif %}
+
+
+<script>
+
+function askSuggestedQuestion(
+    question,
+    operation,
+    column
+) {
+
+    /*
+        Find the question input.
+    */
+
+    const questionInput = document.querySelector(
+        'input[name="question"]'
+    );
+
+
+    /*
+        Find the hidden operation input.
+    */
+
+    const operationInput = document.querySelector(
+        'input[name="suggested_operation"]'
+    );
+
+
+    /*
+        Find the hidden column input.
+    */
+
+    const columnInput = document.querySelector(
+        'input[name="suggested_column"]'
+    );
+
+
+    /*
+        Fill the inputs.
+    */
+
+    questionInput.value = question;
+
+    operationInput.value = operation;
+
+    columnInput.value = column;
+
+
+    /*
+        Submit the form.
+    */
+
+    questionInput.form.submit();
+
+}
+
+</script>
+
+
+{% endblock %}

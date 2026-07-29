@@ -6,7 +6,7 @@ Data Quality Report
 
 {% block content %}
 
-<h2>🩺 Data Quality Report</h2>
+<h2>Data Quality Report</h2>
 
 <p><strong>Dataset:</strong> {{ filename }}</p>
 
@@ -74,7 +74,7 @@ Data Quality Report
 
 {% else %}
 
-<p>None 🎉</p>
+<p>None</p>
 
 {% endif %}
 
@@ -97,3 +97,10 @@ Data Quality Report
 <h3>Basic Statistics</h3>
 
 {{ report.statistics | safe }}
+
+<hr>
+
+<a href="{{ url_for('visualizations') }}">
+    <button>Next → Visualizations</button>
+</a>
+{% endblock %}

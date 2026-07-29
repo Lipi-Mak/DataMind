@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+
+{% block title %}
+AI Insights
+{% endblock %}
+
+{% block content %}
+
+<h2>AI Data Insights</h2>
+
+<p>
+    <strong>Dataset:</strong> {{ filename }}
+</p>
+
+<hr>
+
+<h3>Data Findings</h3>
+
+<p>
+    These findings were calculated directly from your dataset.
+</p>
+
+<ul>
+
+{% for insight in factual_insights %}
+
+    <li>
+        {{ insight }}
+    </li>
+
+{% endfor %}
+
+</ul>
+
+<hr>
+
+<!-- ================================= -->
+<!-- KEY FINDINGS -->
+<!-- ================================= -->
+
+<section class="key-findings-section">
+
+    <h2>DataMind's Key Findings</h2>
+
+    <p>
+        These are the most important findings
+        identified from your dataset.
+    </p>
+
+
+    {% if key_findings %}
+
+        <div class="key-findings-list">
+
+            {% for finding in key_findings %}
+
+                <div class="key-finding-card">
+
+                    <div class="key-finding-header">
+
+                        <span class="finding-type">
+                            {{ finding.type }}
+                        </span>
+
+                        <span class="finding-priority">
+                            Priority {{ finding.priority }}
+                        </span>
+
+                    </div>
+
+
+                    <h3>
+                        {{ finding.title }}
+                    </h3>
+
+
+                    <p>
+                        {{ finding.description }}
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <p>
+            No significant findings were identified
+            in the dataset.
+        </p>
+
+    {% endif %}
+
+</section>
+
+<!-- ================================= -->
+<!-- AI KEY FINDINGS EXPLANATION -->
+<!-- ================================= -->
+
+<section class="ai-key-findings-section">
+
+    <h2>DataMind's Explanation</h2>
+
+    <div class="ai-analysis">
+
+        {{ ai_key_findings | safe }}
+
+    </div>
+
+</section>
+
+<h3>DataMind Analysis</h3>
+
+<div>
+
+    {{ ai_analysis | replace('\n', '<br>') | safe }}
+
+</div>
+
+<hr>
+
+
+<!-- ================================= -->
+<!-- DETECTED OUTLIERS -->
+<!-- ================================= -->
+
+<section class="outliers-section">
+
+    <h2>Detected Outliers</h2>
+
+    {% if outliers %}
+
+        {% for outlier in outliers %}
+
+            <div class="outlier-card">
+
+                <h3>
+                    Column: {{ outlier["column"] }}
+                </h3>
+
+                <p>
+                    <strong>
+                        Number of unusual values:
+                    </strong>
+
+                    {{ outlier["count"] }}
+                </p>
+
+                <p>
+                    <strong>
+                        Values:
+                    </strong>
+
+                    {{ outlier["values"] }}
+                </p>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>
+            No unusual values were detected.
+        </p>
+
+    {% endif %}
+
+</section>
+
+<!-- ================================= -->
+<!-- DETECTED RELATIONSHIPS -->
+<!-- ================================= -->
+
+<section class="relationships-section">
+
+    <h2>Detected Relationships</h2>
+
+
+    {% if relationship_findings %}
+
+        <div class="relationship-list">
+
+            {% for relationship in relationship_findings %}
+
+                <div class="relationship-card">
+
+                    <h3>
+                        {{ relationship.column_a }}
+                        and
+                        {{ relationship.column_b }}
+                    </h3>
+
+
+                    <p>
+                        <strong>Correlation:</strong>
+
+                        {{ "%.2f"|format(
+                            relationship.correlation
+                        ) }}
+                    </p>
+
+
+                    <p>
+                        <strong>Direction:</strong>
+
+                        {{ relationship.relationship }}
+                    </p>
+
+
+                    <p>
+                        <strong>Strength:</strong>
+
+                        {{ relationship.strength }}
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <p>
+            No strong relationships between numerical
+            columns were detected.
+        </p>
+
+    {% endif %}
+
+</section>
+
+<div class="back-button-container">
+    <a href="{{ url_for('visualizations') }}">
+        <button>Back to Visualizations</button>
+    </a>
+</div>
+
+{% endblock %}

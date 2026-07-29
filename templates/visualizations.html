@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}
+Visualizations
+{% endblock %}
+
+{% block content %}
+
+<h2>Visualization Engine</h2>
+
+<p>
+    <strong>Dataset:</strong> {{ filename }}
+</p>
+
+<hr>
+
+
+<h3>Histograms</h3>
+
+<p>
+    Histograms show how numerical values are distributed across the dataset.
+</p>
+
+{% if histogram_paths %}
+
+    {% for chart in histogram_paths %}
+
+        <h4>
+            {{ chart.split('/')[-1]
+                .replace('_histogram.png', '')
+                .replace('_', ' ')
+                .title()
+            }}
+        </h4>
+
+        <img
+            src="{{ url_for('static', filename=chart) }}"
+            style="max-width: 100%; height: auto;"
+            alt="Histogram"
+        >
+
+        <hr>
+
+    {% endfor %}
+
+{% else %}
+
+    <p>
+        No suitable numerical columns were found for histograms.
+    </p>
+
+{% endif %}
+
+
+<h3>Box Plots</h3>
+
+<p>
+    Box plots help identify the spread of numerical values and potential outliers.
+</p>
+
+{% if boxplot_paths %}
+
+    {% for chart in boxplot_paths %}
+
+        <h4>
+            {{ chart.split('/')[-1]
+                .replace('_boxplot.png', '')
+                .replace('_', ' ')
+                .title()
+            }}
+        </h4>
+
+        <img
+            src="{{ url_for('static', filename=chart) }}"
+            style="max-width: 100%; height: auto;"
+            alt="Box Plot"
+        >
+
+        <hr>
+
+    {% endfor %}
+
+{% else %}
+
+    <p>
+        No suitable numerical columns were found for box plots.
+    </p>
+
+{% endif %}
+
+
+<h3>Correlation Heatmap</h3>
+
+<p>
+    The correlation heatmap shows relationships between numerical variables.
+</p>
+
+{% if heatmap_path %}
+
+    <img
+        src="{{ url_for('static', filename=heatmap_path) }}"
+        style="max-width: 100%; height: auto;"
+        alt="Correlation Heatmap"
+    >
+
+{% else %}
+
+    <p>
+        A correlation heatmap could not be generated because
+        the dataset does not contain enough numerical columns.
+    </p>
+
+{% endif %}
+
+<hr>
+
+
+<h3>Bar Charts</h3>
+
+<p>
+    Bar charts show the frequency of categories in categorical columns.
+</p>
+
+{% if bar_chart_paths %}
+
+    {% for chart in bar_chart_paths %}
+
+        <h4>
+            {{ chart.split('/')[-1]
+                .replace('_bar_chart.png', '')
+                .replace('_', ' ')
+                .title()
+            }}
+        </h4>
+
+        <img
+            src="{{ url_for('static', filename=chart) }}"
+            style="max-width: 100%; height: auto;"
+            alt="Bar Chart"
+        >
+
+        <hr>
+
+    {% endfor %}
+
+{% else %}
+
+    <p>
+        No suitable categorical columns were found for bar charts.
+    </p>
+
+{% endif %}
+
+
+<hr>
+
+<a href="{{ url_for('overview') }}">
+    <button>Back to Dataset Overview</button>
+</a>
+
+<a href="{{ url_for('quality') }}">
+    <button>Back to Data Quality</button>
+</a>
+
+<hr>
+
+<a href="{{ url_for('insights') }}">
+    <button>Next → AI Insights</button>
+</a>
+
+<hr>
+
+<a href="{{ url_for('ask') }}">
+    <button>
+        Next → Ask DataMind
+    </button>
+</a>
+
+{% endblock %}
