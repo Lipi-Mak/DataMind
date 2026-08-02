@@ -47,6 +47,32 @@ from utils.relationship_detector import (
 
 app = Flask(__name__)
 
+
+# ==========================================================
+# GLOBAL ERROR HANDLER
+# ==========================================================
+
+@app.errorhandler(500)
+def internal_server_error(error):
+
+    print(
+        "\nInternal Server Error:"
+    )
+
+    print(
+        error
+    )
+
+    return render_template(
+        "error.html",
+        message=(
+            "Something went wrong while "
+            "processing your request. "
+            "Please try again."
+        )
+    ), 500
+
+
 app.secret_key = "datamind_secret_key"
 
 UPLOAD_FOLDER = "uploads"
@@ -168,328 +194,245 @@ def ask():
     if "dataset_path" not in session:
         return redirect(url_for("home"))
 
-
     answer = None
-
     question = ""
-
 
     if request.method == "POST":
 
-        # ---------------------------------
-        # GET USER QUESTION
-        # ---------------------------------
+        try:
 
-        question = request.form.get(
-            "question",
-            ""
-        ).strip()
+            # ---------------------------------
+            # GET USER QUESTION
+            # ---------------------------------
 
-
-        # ---------------------------------
-        # GET SUGGESTED QUESTION DATA
-        # ---------------------------------
-
-        suggested_operation = request.form.get(
-            "suggested_operation",
-            ""
-        ).strip().lower()
-
-
-        suggested_column = request.form.get(
-            "suggested_column",
-            ""
-        ).strip()
-
-
-        # ---------------------------------
-        # LOAD DATASET
-        # ---------------------------------
-
-        df = pd.read_csv(
-            session["dataset_path"]
-        )
-
-
-        # ---------------------------------
-        # GENERATE DATASET CONTEXT
-        # ---------------------------------
-
-        dataset_context = generate_dataset_context(
-            df
-        )
-
-
-        # ---------------------------------
-        # CHECK IF SUGGESTED QUESTION
-        # ---------------------------------
-
-        if suggested_operation:
-
-            print("\nSuggested Question:")
-            print(question)
-
-            print("\nSuggested Operation:")
-            print(suggested_operation)
-
-            print("\nSuggested Column:")
-            print(suggested_column)
+            question = request.form.get(
+                "question",
+                ""
+            ).strip()
 
 
             # ---------------------------------
-            # USE PREDEFINED OPERATION
+            # GET SUGGESTED QUESTION DATA
             # ---------------------------------
 
-            operation = suggested_operation
+            suggested_operation = request.form.get(
+                "suggested_operation",
+                ""
+            ).strip().lower()
 
-            column = suggested_column
+
+            suggested_column = request.form.get(
+                "suggested_column",
+                ""
+            ).strip()
 
 
             # ---------------------------------
-            # CALCULATE FACTUAL ANSWER
+            # LOAD DATASET
             # ---------------------------------
 
-            factual_answer = (
-                answer_from_understanding(
+            df = pd.read_csv(
+                session["dataset_path"]
+            )
+
+
+            # ---------------------------------
+            # GENERATE DATASET CONTEXT
+            # ---------------------------------
+
+            dataset_context = generate_dataset_context(
+                df
+            )
+
+
+            # ---------------------------------
+            # CHECK IF SUGGESTED QUESTION
+            # ---------------------------------
+
+            if suggested_operation:
+
+                print("\nSuggested Question:")
+                print(question)
+
+                print("\nSuggested Operation:")
+                print(suggested_operation)
+
+                print("\nSuggested Column:")
+                print(suggested_column)
+
+
+                # ---------------------------------
+                # USE PREDEFINED OPERATION
+                # ---------------------------------
+
+                operation = suggested_operation
+                column = suggested_column
+
+
+                # ---------------------------------
+                # CALCULATE FACTUAL ANSWER
+                # ---------------------------------
+
+                factual_answer = answer_from_understanding(
                     df,
                     operation,
                     column
                 )
-            )
-
-            # ---------------------------------
-            # CHECK IF QUESTION IS DATASET-RELATED
-            # ---------------------------------
-
-            if operation == "out_of_scope":
-
-                answer = (
-                    "I can only answer questions "
-                    "related to the uploaded dataset."
-                )
 
 
-            # ---------------------------------
-            # SIMPLE QUESTIONS
-            # ---------------------------------
-
-            elif is_simple_question(
-                operation
-            ):
-
-                answer = factual_answer
-
-
-            # ---------------------------------
-            # COMPLEX QUESTIONS
-            # ---------------------------------
-
-            else:
-
-                answer = explain_answer(
-                question,
-                factual_answer
-            )
-
-            print("\nFactual Answer:")
-
-            print(
-                factual_answer
-            )
-
-
-            # ---------------------------------
-            # RETURN DIRECT ANSWER
-            # ---------------------------------
-
-            answer = factual_answer
-
-
-        # ---------------------------------
-        # MANUAL USER QUESTION
-        # ---------------------------------
-
-        else:
-
-            print("\nManual User Question:")
-            print(question)
-
-        try:
-            # ---------------------------------
-            # CHECK QUESTION RELEVANCE
-            # ---------------------------------
-
-            is_relevant = is_question_relevant(
-                question,
-                dataset_context
-            )
-
-
-            print(
-                "\nQuestion Relevant:"
-            )
-
-            print(
-                is_relevant
-            )
-
-
-            # ---------------------------------
-            # HANDLE UNRELATED QUESTION
-            # ---------------------------------
-
-            if not is_relevant:
-
-                answer = (
-                    "I'm sorry, but I can only "
-                    "answer questions related to "
-                    "your uploaded dataset. "
-                    "Please ask me something about "
-                    "the data."
-                )
-
-                return render_template(
-                    "ask.html",
-                    answer=answer
-                )
-
-            else:
-
-                # ---------------------------------
-                # UNDERSTAND QUESTION
-                # ---------------------------------
-
-                is_valid, operation, column = (
-                    understand_question_with_retry(
-                        question,
-                        dataset_context
-                    )
-                )
-
-
-                print(
-                    "\nValidated Operation:"
-                )
-
-                print(
-                    operation
-                )
-
-
-                print(
-                    "\nValidated Column:"
-                )
-
-                print(
-                    column
-                )
+                print("\nFactual Answer:")
+                print(factual_answer)
 
 
                 # ---------------------------------
-                # HANDLE INVALID QUESTION
+                # HANDLE RESPONSE
                 # ---------------------------------
 
-                if not is_valid:
+                if operation == "unsupported":
 
                     answer = (
-                        "I'm sorry, but I couldn't "
-                        "understand that question. "
-                        "Please try asking something "
-                        "about the data in your dataset."
+                        "I'm sorry, but I can only answer "
+                        "questions related to the uploaded dataset."
+                    )
+
+                elif is_simple_question(operation):
+
+                    answer = factual_answer
+
+                else:
+
+                    answer = explain_answer(
+                        question,
+                        factual_answer
+                    )
+
+
+            # ---------------------------------
+            # MANUAL USER QUESTION
+            # ---------------------------------
+
+            else:
+
+                print("\nManual User Question:")
+                print(question)
+
+
+                # ---------------------------------
+                # CHECK QUESTION RELEVANCE
+                # ---------------------------------
+
+                is_relevant = is_question_relevant(
+                    question,
+                    dataset_context
+                )
+
+
+                print("\nQuestion Relevant:")
+                print(is_relevant)
+
+
+                # ---------------------------------
+                # HANDLE UNRELATED QUESTION
+                # ---------------------------------
+
+                if not is_relevant:
+
+                    answer = (
+                        "I'm sorry, but I can only "
+                        "answer questions related to "
+                        "your uploaded dataset. "
+                        "Please ask me something about "
+                        "the data."
                     )
 
 
                 else:
 
                     # ---------------------------------
-                    # GET FACTUAL ANSWER
+                    # UNDERSTAND QUESTION
                     # ---------------------------------
 
-                    factual_answer = (
-                        answer_from_understanding(
-                            df,
-                            operation,
-                            column
+                    is_valid, operation, column = (
+                        understand_question_with_retry(
+                            question,
+                            dataset_context
                         )
                     )
 
 
-                    print(
-                        "\nFactual Answer:"
-                    )
+                    print("\nValidated Operation:")
+                    print(operation)
 
-                    print(
-                        factual_answer
-                    )
+                    print("\nValidated Column:")
+                    print(column)
 
 
                     # ---------------------------------
-                    # HANDLE UNSUPPORTED OPERATION
+                    # HANDLE INVALID QUESTION
                     # ---------------------------------
 
-                    if operation == "unsupported":
+                    if not is_valid:
+
                         answer = (
-                            "I'm sorry, but I can only answer "
-                            "questions related to the uploaded dataset."
+                            "I'm sorry, but I couldn't "
+                            "understand that question. "
+                            "Please try asking something "
+                            "about the data in your dataset."
                         )
-                    
-                    
-                    # ---------------------------------
-                    # DATASET SUMMARY
-                    # ---------------------------------        
-                    
-                    elif operation == "dataset_summary":
-                        answer = factual_answer
-
-                    
-
-                    # ---------------------------------
-                    # OTHER QUESTIONS
-                    # ---------------------------------
-
-                    else:
-                        answer = explain_answer(
-                            question,
-                            factual_answer
-                        )
-
-
-
-                    # ---------------------------------
-                    # SIMPLE QUESTIONS
-                    # ---------------------------------
-
-                    if is_simple_question(
-                        operation
-                    ):
-
-                        answer = factual_answer
-
-
-                    # ---------------------------------
-                    # COMPLEX QUESTIONS
-                    # ---------------------------------
 
                     else:
 
-                        answer = explain_answer(
-                            question,
-                            factual_answer
+                        # ---------------------------------
+                        # GET FACTUAL ANSWER
+                        # ---------------------------------
+
+                        factual_answer = (
+                            answer_from_understanding(
+                                df,
+                                operation,
+                                column
+                            )
                         )
+
+
+                        print("\nFactual Answer:")
+                        print(factual_answer)
+
+
+                        # ---------------------------------
+                        # HANDLE RESPONSE
+                        # ---------------------------------
+
+                        if operation == "unsupported":
+
+                            answer = (
+                                "I'm sorry, but I can only answer "
+                                "questions related to the uploaded dataset."
+                            )
+
+                        elif is_simple_question(operation):
+
+                            answer = factual_answer
+
+                        else:
+
+                            answer = explain_answer(
+                                question,
+                                factual_answer
+                            )
+
+
         except Exception as e:
-            print(
-                "\nError while processing question:"
-            )
-            print(
-                e
-            )
+
+            print("\nError while processing question:")
+            print(e)
+
             answer = (
                 "Sorry, I couldn't process "
                 "your question right now. "
                 "Please try again."
             )
 
-    
 
     # ---------------------------------
     # RENDER PAGE
@@ -507,6 +450,7 @@ def ask():
 
     )
 
+    
 @app.route("/insights")
 def insights():
 

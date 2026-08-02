@@ -12,7 +12,17 @@ Ask DataMind
 
 <hr>
 
-<form method="POST">
+<form 
+    method="POST"
+    id="ask-form"
+>
+
+<div
+    id="loading-message"
+    style="display: none;"
+>
+    DataMind is analyzing your question...
+</div>
 
     <input
         type="text"
@@ -158,6 +168,24 @@ Ask DataMind
 
 <script>
 
+    const askForm = document.getElementById(
+        "ask-form"
+    );
+    
+    const loadingMessage = document.getElementById(
+        "loading-message"
+    );
+    
+    
+    askForm.addEventListener(
+        "submit",
+        function() {
+    
+            loadingMessage.style.display = "block";
+    
+        }
+    );
+
 function askSuggestedQuestion(
     question,
     operation,
@@ -206,7 +234,7 @@ function askSuggestedQuestion(
         Submit the form.
     */
 
-    questionInput.form.submit();
+    questionInput.form.requestSubmit();
 
 }
 

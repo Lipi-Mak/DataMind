@@ -1,6 +1,6 @@
 import pandas as pd
 import ollama
-
+import traceback
 
 # ==========================================================
 # GENERATE DATASET CONTEXT
@@ -168,10 +168,10 @@ def generate_dataset_summary(
 Dataset Information:
 
 Number of rows:
-{row_count}
+{row_count:,}
 
 Number of columns:
-{column_count}
+{column_count:,}
 
 Columns:
 {", ".join(columns)}
@@ -183,10 +183,10 @@ Categorical columns:
 {", ".join(categorical_columns) if categorical_columns else "None"}
 
 Total missing values:
-{total_missing}
+{total_missing:,}
 
 Duplicate rows:
-{duplicate_count}
+{duplicate_count:,}
 """
 
 
@@ -232,31 +232,37 @@ Return a concise summary in 2-4 sentences.
 """
 
 
-    response = ollama.chat(
+    try:
 
-        model="llama3.2:3b",
+        response = ollama.chat(
 
-        messages=[
+            model="llama3.2:3b",
 
-            {
-                "role": "user",
+            messages=[
 
-                "content": prompt
+                {
+                    "role": "user",
 
-            }
+                    "content": prompt
 
-        ]
+                }
 
-    )
+            ]
 
+        )
+
+        return (
+            response["message"]["content"]
+            .strip()
+        )
+
+    except Exception:
+
+        print("\nOllama Error:")
+        traceback.print_exc()
 
     return (
-        response[
-            "message"
-        ][
-            "content"
-        ]
-        .strip()
+        "I couldn't generate a dataset summary at the moment."
     )
 
 
@@ -1027,21 +1033,36 @@ USER QUESTION:
 RETURN ONLY THE CLASSIFICATION.
 """
 
-    response = ollama.chat(
-        model="llama3.2:3b",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
-    )
+    try:
 
-    return (
-        response["message"]["content"]
-        .strip()
-    )
+        response = ollama.chat(
 
+            model="llama3.2:3b",
+
+            messages=[
+
+                {
+                    "role": "user",
+
+                    "content": prompt
+
+                }
+
+            ]
+
+        )
+
+        return (
+            response["message"]["content"]
+            .strip()
+        )
+
+    except Exception:
+
+        print("\nOllama Error:")
+        traceback.print_exc()
+
+        return "unsupported,None"
 
 
 # ==========================================================
@@ -1150,20 +1171,29 @@ Do not add punctuation.
 """
 
 
-    response = ollama.chat(
+    try:
 
-        model="llama3.2:3b",
+        response = ollama.chat(
 
-        messages=[
+            model="llama3.2:3b",
 
-            {
-                "role": "user",
-                "content": prompt
-            }
+            messages=[
 
-        ]
+                {
+                    "role": "user",
+                    "content": prompt
+                }
 
-    )
+            ]
+
+        )
+
+    except Exception:
+
+        print("\nOllama Error:")
+        traceback.print_exc()
+
+        return False
 
 
     result = (
@@ -1655,7 +1685,7 @@ def answer_from_understanding(
                 results.append(
 
                     f"{group}: "
-                    f"{average:.2f}"
+                    f"{average:,.2f}"
 
                 )
 
@@ -1711,7 +1741,7 @@ def answer_from_understanding(
                 f"{highest_group}, "
                 f"with an average value "
                 f"of "
-                f"{highest_average:.2f}."
+                f"{highest_average:,.2f}."
 
             )
 
@@ -1903,7 +1933,7 @@ def answer_from_understanding(
                 f"The average value of "
                 f"{actual_column} "
                 f"is "
-                f"{value:.2f}."
+                f"{value:,.2f}."
 
             )
 
@@ -1945,7 +1975,7 @@ def answer_from_understanding(
                 f"The minimum value of "
                 f"{actual_column} "
                 f"is "
-                f"{value:.2f}."
+                f"{value:,.2f}."
 
             )
 
@@ -1966,7 +1996,7 @@ def answer_from_understanding(
                 f"The maximum value of "
                 f"{actual_column} "
                 f"is "
-                f"{value:.2f}."
+                f"{value:,.2f}."
 
             )
 
@@ -1987,7 +2017,7 @@ def answer_from_understanding(
                 f"The total sum of "
                 f"{actual_column} "
                 f"is "
-                f"{value:.2f}."
+                f"{value:,.2f}."
 
             )
 
@@ -2296,22 +2326,6 @@ def answer_from_understanding(
         "I couldn't answer that question yet."
 
     )
-
-    # ======================================================
-    # UNSUPPORTED QUESTION
-    # ======================================================
-
-    if operation == "unsupported":
-
-        return (
-
-            "I'm here to help you understand "
-            "your uploaded dataset. "
-            "Please ask me a question about "
-            "the data."
-
-        )
-
 
     # ======================================================
     # DATASET SUMMARY

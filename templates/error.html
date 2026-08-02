@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Error - DataMind</title>
+
+    <style>
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-family: Arial, sans-serif;
+
+            background-color: #f5f7fa;
+
+        }
+
+
+        .error-container {
+
+            max-width: 500px;
+
+            padding: 40px;
+
+            text-align: center;
+
+            background-color: white;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 20px
+                rgba(0, 0, 0, 0.08);
+
+        }
+
+
+        h1 {
+
+            margin-bottom: 15px;
+
+        }
+
+
+        p {
+
+            color: #666;
+
+            line-height: 1.6;
+
+        }
+
+
+        a {
+
+            display: inline-block;
+
+            margin-top: 20px;
+
+            padding: 10px 20px;
+
+            text-decoration: none;
+
+            border-radius: 6px;
+
+            background-color: #333;
+
+            color: white;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="error-container">
+
+        <h1>
+            Something went wrong
+        </h1>
+
+
+        <p>
+            {{ message }}
+        </p>
+
+
+        <a href="{{ url_for('home') }}">
+            Return to DataMind
+        </a>
+
+    </div>
+
+</body>
+
+</html>
