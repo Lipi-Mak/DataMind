@@ -1,106 +1,503 @@
 {% extends "base.html" %}
 
+
+
 {% block title %}
-Data Quality Report
+
+Data Quality Report - DataMind
+
 {% endblock %}
+
+
+
 
 {% block content %}
 
-<h2>Data Quality Report</h2>
 
-<p><strong>Dataset:</strong> {{ filename }}</p>
 
-<hr>
+<!-- HEADER -->
 
-<h3>Overall Dataset Health</h3>
+<div class="mb-5">
 
-<h2>{{ report.health }}</h2>
 
-<hr>
+    <h1>
 
-<h3>Total Missing Values</h3>
+        Data Quality Report
 
-<p>{{ report.total_missing }}</p>
+    </h1>
 
-<hr>
 
-<h3>Missing Values by Column</h3>
+    <p class="fs-5">
 
-<table border="1" cellpadding="8">
+        Analyze dataset reliability and identify potential issues before further analysis.
 
-<tr>
+    </p>
 
-<th>Column</th>
 
-<th>Missing Values</th>
+</div>
 
-</tr>
 
-{% for column, value in report.missing_values.items() %}
 
-<tr>
 
-<td>{{ column }}</td>
 
-<td>{{ value }}</td>
 
-</tr>
 
-{% endfor %}
 
-</table>
+<!-- DATASET -->
 
-<hr>
 
-<h3>Duplicate Rows</h3>
+<div class="card-modern mb-5">
 
-<p>{{ report.duplicate_rows }}</p>
 
-<hr>
+    <h3>
 
-<h3>Empty Columns</h3>
+        <i class="bi bi-file-earmark-spreadsheet"></i>
+
+        Dataset
+
+    </h3>
+
+
+    <p class="mt-3 mb-0">
+
+        {{ filename }}
+
+    </p>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- HEALTH CARD -->
+
+
+<div class="card-modern mb-5 text-center">
+
+
+    <p>
+
+        Overall Dataset Health
+
+    </p>
+
+
+
+    <h1 style="color:#059669;">
+
+        {{ report.health }}
+
+    </h1>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- METRIC CARDS -->
+
+
+<div class="row g-4 mb-5">
+
+
+
+    <div class="col-md-4">
+
+
+        <div class="card-modern text-center">
+
+
+            <i
+            class="bi bi-exclamation-triangle"
+            style="font-size:35px;color:#059669;"
+            ></i>
+
+
+            <h2 class="mt-3">
+
+                {{ report.total_missing }}
+
+            </h2>
+
+
+            <p>
+
+                Missing Values
+
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <div class="col-md-4">
+
+
+        <div class="card-modern text-center">
+
+
+            <i
+            class="bi bi-copy"
+            style="font-size:35px;color:#059669;"
+            ></i>
+
+
+            <h2 class="mt-3">
+
+                {{ report.duplicate_rows }}
+
+            </h2>
+
+
+            <p>
+
+                Duplicate Rows
+
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+    <div class="col-md-4">
+
+
+        <div class="card-modern text-center">
+
+
+            <i
+            class="bi bi-database-x"
+            style="font-size:35px;color:#059669;"
+            ></i>
+
+
+            <h2 class="mt-3">
+
+                {{ report.empty_columns | length }}
+
+            </h2>
+
+
+            <p>
+
+                Empty Columns
+
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- MISSING VALUES -->
+
+
+<div class="card-modern mb-5">
+
+
+    <h3>
+
+        <i class="bi bi-table"></i>
+
+        Missing Values By Column
+
+    </h3>
+
+
+
+
+    <div class="table-responsive mt-4">
+
+
+        <table class="table align-middle">
+
+
+            <thead>
+
+
+                <tr>
+
+                    <th>
+                        Column
+                    </th>
+
+
+                    <th>
+                        Missing Values
+                    </th>
+
+
+                </tr>
+
+
+            </thead>
+
+
+
+            <tbody>
+
+
+
+            {% for column, value in report.missing_values.items() %}
+
+
+
+                <tr>
+
+
+                    <td>
+
+                        {{ column }}
+
+                    </td>
+
+
+                    <td>
+
+                        {{ value }}
+
+                    </td>
+
+
+                </tr>
+
+
+            {% endfor %}
+
+
+
+            </tbody>
+
+
+        </table>
+
+
+    </div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- EMPTY COLUMNS -->
+
+
+<div class="card-modern mb-5">
+
+
+<h3>
+
+<i class="bi bi-database-x"></i>
+
+Empty Columns
+
+</h3>
+
+
 
 {% if report.empty_columns %}
 
-<ul>
+
+
+<ul class="mt-4">
+
 
 {% for column in report.empty_columns %}
 
-<li>{{ column }}</li>
+
+<li>
+
+{{ column }}
+
+</li>
+
 
 {% endfor %}
 
+
 </ul>
+
+
+
 
 {% else %}
 
-<p>None</p>
+
+<p class="mt-3">
+
+No empty columns detected.
+
+</p>
+
+
 
 {% endif %}
 
-<hr>
 
-<h3>Observations</h3>
 
-<ul>
+</div>
+
+
+
+
+
+
+
+
+
+<!-- OBSERVATIONS -->
+
+
+<div class="card-modern mb-5">
+
+
+<h3>
+
+<i class="bi bi-lightbulb"></i>
+
+Observations
+
+</h3>
+
+
+
+<ul class="mt-4">
+
 
 {% for observation in report.observations %}
 
-<li>{{ observation }}</li>
+
+<li class="mb-2">
+
+{{ observation }}
+
+</li>
+
 
 {% endfor %}
 
+
+
 </ul>
 
-<hr>
 
-<h3>Basic Statistics</h3>
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- STATISTICS -->
+
+
+<div class="card-modern mb-5">
+
+
+<h3>
+
+<i class="bi bi-bar-chart"></i>
+
+Basic Statistics
+
+</h3>
+
+
+
+
+<div class="table-responsive mt-4">
+
 
 {{ report.statistics | safe }}
 
-<hr>
 
-<a href="{{ url_for('visualizations') }}">
-    <button>Next → Visualizations</button>
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- NEXT BUTTON -->
+
+
+<div class="text-end">
+
+
+<a
+href="{{ url_for('visualizations') }}"
+class="btn-primary-custom text-decoration-none"
+>
+
+
+Continue to Visualizations
+
+<i class="bi bi-arrow-right"></i>
+
+
 </a>
+
+
+</div>
+
+
+
+
 {% endblock %}

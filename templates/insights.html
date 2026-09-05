@@ -1,242 +1,586 @@
 {% extends "base.html" %}
 
+
 {% block title %}
-AI Insights
+
+AI Insights - DataMind
+
 {% endblock %}
+
+
 
 {% block content %}
 
-<h2>AI Data Insights</h2>
+
+
+<!-- HEADER -->
+
+<div class="mb-4">
+
+
+<h1>
+
+AI Data Insights 
+
+</h1>
+
 
 <p>
-    <strong>Dataset:</strong> {{ filename }}
+
+DataMind analyzed your dataset and discovered important patterns, anomalies, and relationships.
+
 </p>
 
-<hr>
 
-<h3>Data Findings</h3>
+</div>
+
+
+
+<!-- DATASET -->
+
+<div class="card-modern mb-4">
+
+
+<h3>
+
+<i class="bi bi-file-earmark-spreadsheet"></i>
+
+Dataset
+
+</h3>
+
+
+<p class="mt-3 mb-0">
+
+{{ filename }}
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+<!-- FACTUAL INSIGHTS -->
+
+<div class="card-modern mb-4">
+
+
+<h3>
+
+<i class="bi bi-search"></i>
+
+Data Findings
+
+</h3>
+
 
 <p>
-    These findings were calculated directly from your dataset.
+
+These findings were calculated directly from your dataset.
+
 </p>
 
-<ul>
+
+
+<ul class="mt-3">
+
 
 {% for insight in factual_insights %}
 
-    <li>
-        {{ insight }}
-    </li>
+
+<li class="mb-2">
+
+{{ insight }}
+
+</li>
+
 
 {% endfor %}
 
+
 </ul>
 
-<hr>
 
-<!-- ================================= -->
+</div>
+
+
+
+
+
 <!-- KEY FINDINGS -->
-<!-- ================================= -->
 
-<section class="key-findings-section">
-
-    <h2>DataMind's Key Findings</h2>
-
-    <p>
-        These are the most important findings
-        identified from your dataset.
-    </p>
+<div class="card-modern mb-4">
 
 
-    {% if key_findings %}
+<h3>
 
-        <div class="key-findings-list">
+<i class="bi bi-lightbulb"></i>
 
-            {% for finding in key_findings %}
+DataMind's Key Findings
 
-                <div class="key-finding-card">
-
-                    <div class="key-finding-header">
-
-                        <span class="finding-type">
-                            {{ finding.type }}
-                        </span>
-
-                        <span class="finding-priority">
-                            Priority {{ finding.priority }}
-                        </span>
-
-                    </div>
+</h3>
 
 
-                    <h3>
-                        {{ finding.title }}
-                    </h3>
+<p>
+
+Important patterns automatically identified from your data.
+
+</p>
 
 
-                    <p>
-                        {{ finding.description }}
-                    </p>
 
-                </div>
 
-            {% endfor %}
+{% if key_findings %}
 
-        </div>
 
-    {% else %}
 
-        <p>
-            No significant findings were identified
-            in the dataset.
-        </p>
+<div class="row g-3 mt-2">
 
-    {% endif %}
 
-</section>
+{% for finding in key_findings %}
 
-<!-- ================================= -->
-<!-- AI KEY FINDINGS EXPLANATION -->
-<!-- ================================= -->
 
-<section class="ai-key-findings-section">
 
-    <h2>DataMind's Explanation</h2>
+<div class="col-lg-6">
 
-    <div class="ai-analysis">
 
-        {{ ai_key_findings | safe }}
+<div class="card-modern">
 
-    </div>
 
-</section>
+<div class="mb-2">
 
-<h3>DataMind Analysis</h3>
 
-<div>
+<span class="badge rounded-pill">
 
-    {{ ai_analysis | replace('\n', '<br>') | safe }}
+{{ finding.type }}
+
+</span>
+
+
+<span class="ms-2 text-muted">
+
+Priority {{ finding.priority }}
+
+</span>
+
 
 </div>
 
-<hr>
 
 
-<!-- ================================= -->
-<!-- DETECTED OUTLIERS -->
-<!-- ================================= -->
+<h3>
 
-<section class="outliers-section">
+{{ finding.title }}
 
-    <h2>Detected Outliers</h2>
-
-    {% if outliers %}
-
-        {% for outlier in outliers %}
-
-            <div class="outlier-card">
-
-                <h3>
-                    Column: {{ outlier["column"] }}
-                </h3>
-
-                <p>
-                    <strong>
-                        Number of unusual values:
-                    </strong>
-
-                    {{ outlier["count"] }}
-                </p>
-
-                <p>
-                    <strong>
-                        Values:
-                    </strong>
-
-                    {{ outlier["values"] }}
-                </p>
-
-            </div>
-
-        {% endfor %}
-
-    {% else %}
-
-        <p>
-            No unusual values were detected.
-        </p>
-
-    {% endif %}
-
-</section>
-
-<!-- ================================= -->
-<!-- DETECTED RELATIONSHIPS -->
-<!-- ================================= -->
-
-<section class="relationships-section">
-
-    <h2>Detected Relationships</h2>
+</h3>
 
 
-    {% if relationship_findings %}
 
-        <div class="relationship-list">
+<p>
 
-            {% for relationship in relationship_findings %}
+{{ finding.description }}
 
-                <div class="relationship-card">
-
-                    <h3>
-                        {{ relationship.column_a }}
-                        and
-                        {{ relationship.column_b }}
-                    </h3>
+</p>
 
 
-                    <p>
-                        <strong>Correlation:</strong>
 
-                        {{ "%.2f"|format(
-                            relationship.correlation
-                        ) }}
-                    </p>
-
-
-                    <p>
-                        <strong>Direction:</strong>
-
-                        {{ relationship.relationship }}
-                    </p>
-
-
-                    <p>
-                        <strong>Strength:</strong>
-
-                        {{ relationship.strength }}
-                    </p>
-
-                </div>
-
-            {% endfor %}
-
-        </div>
-
-    {% else %}
-
-        <p>
-            No strong relationships between numerical
-            columns were detected.
-        </p>
-
-    {% endif %}
-
-</section>
-
-<div class="back-button-container">
-    <a href="{{ url_for('visualizations') }}">
-        <button>Back to Visualizations</button>
-    </a>
 </div>
+
+
+</div>
+
+
+
+{% endfor %}
+
+
+</div>
+
+
+
+
+{% else %}
+
+
+<p>
+
+No significant findings were identified.
+
+</p>
+
+
+{% endif %}
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- AI EXPLANATION -->
+
+<div class="card-modern mb-4">
+
+
+<h3>
+
+<i class="bi bi-robot"></i>
+
+DataMind Explanation
+
+</h3>
+
+
+
+<div class="ai-explanation mt-3">
+
+
+
+    {{ ai_key_findings
+        | replace('**','')
+        | replace('\n','<br>')
+        | safe
+    }}
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- AI ANALYSIS -->
+
+<div class="card-modern mb-4">
+
+
+<h3>
+
+<i class="bi bi-stars"></i>
+
+AI Analysis
+
+</h3>
+
+
+
+<div class="answer-text mt-3">
+
+
+<div class="ai-analysis-box mt-3">
+
+
+    {{ ai_analysis
+        | replace('**','')
+        | replace('Key Observations','<strong class="ai-heading">Key Observations</strong>')
+        | replace('Important Patterns','<strong class="ai-heading">Important Patterns</strong>')
+        | replace('Recommendations','<strong class="ai-heading">Recommendations</strong>')
+        | replace('\n','<br>')
+        | safe
+    }}
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- OUTLIERS -->
+
+<div class="card-modern mb-4">
+
+
+<h3>
+
+<i class="bi bi-exclamation-circle"></i>
+
+Detected Outliers
+
+</h3>
+
+
+
+
+{% if outliers %}
+
+
+
+<div class="row g-3 mt-2">
+
+
+
+{% for outlier in outliers %}
+
+
+
+<div class="col-lg-6">
+
+
+<div class="card-modern">
+
+
+<h3>
+
+{{ outlier["column"] }}
+
+</h3>
+
+
+
+<p>
+
+<strong>
+Unusual Values:
+</strong>
+
+{{ outlier["count"] }}
+
+</p>
+
+
+
+<p>
+
+<strong>
+Detected Values:
+</strong>
+
+{{ outlier["values"] }}
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+{% endfor %}
+
+
+
+</div>
+
+
+
+
+{% else %}
+
+
+
+<p>
+
+No unusual values were detected.
+
+</p>
+
+
+
+{% endif %}
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- RELATIONSHIPS -->
+
+<div class="card-modern mb-4">
+
+
+<h3>
+
+<i class="bi bi-diagram-3"></i>
+
+Detected Relationships
+
+</h3>
+
+
+
+{% if relationship_findings %}
+
+
+
+<div class="row g-3 mt-2">
+
+
+
+{% for relationship in relationship_findings %}
+
+
+
+<div class="col-lg-6">
+
+
+<div class="card-modern">
+
+
+<h3>
+
+{{ relationship.column_a }}
+
+&
+
+{{ relationship.column_b }}
+
+</h3>
+
+
+
+<p>
+
+<strong>
+Correlation:
+</strong>
+
+{{ "%.2f"|format(
+relationship.correlation
+) }}
+
+
+</p>
+
+
+
+<p>
+
+<strong>
+Direction:
+</strong>
+
+{{ relationship.relationship }}
+
+</p>
+
+
+
+<p>
+
+<strong>
+Strength:
+</strong>
+
+{{ relationship.strength }}
+
+</p>
+
+
+
+</div>
+
+
+</div>
+
+
+
+{% endfor %}
+
+
+
+</div>
+
+
+
+{% else %}
+
+
+<p>
+
+No strong relationships between numerical columns were detected.
+
+</p>
+
+
+{% endif %}
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- NAVIGATION -->
+
+
+<div class="d-flex justify-content-between mt-4">
+
+
+<a
+href="{{ url_for('visualizations') }}"
+class="btn-outline-custom text-decoration-none"
+>
+
+<i class="bi bi-arrow-left"></i>
+
+Back to Visualizations
+
+</a>
+
+
+
+<a
+href="{{ url_for('ask') }}"
+class="btn-primary-custom text-decoration-none"
+>
+
+Continue to Ask DataMind
+
+<i class="bi bi-arrow-right"></i>
+
+</a>
+
+
+
+</div>
+
+
+
+
+
 
 {% endblock %}

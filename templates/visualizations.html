@@ -1,179 +1,492 @@
 {% extends "base.html" %}
 
+
+
 {% block title %}
-Visualizations
+
+Visualization Engine - DataMind
+
 {% endblock %}
+
+
+
 
 {% block content %}
 
-<h2>Visualization Engine</h2>
 
-<p>
-    <strong>Dataset:</strong> {{ filename }}
+
+
+<!-- HEADER -->
+
+
+<div class="mb-5">
+
+
+    <h1>
+
+        Visualization Engine
+
+    </h1>
+
+
+    <p class="fs-5">
+
+        Explore patterns, distributions, and relationships hidden inside your dataset.
+
+    </p>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- DATASET -->
+
+
+<div class="card-modern mb-5">
+
+
+    <h3>
+
+        <i class="bi bi-file-earmark-bar-graph"></i>
+
+        Dataset
+
+    </h3>
+
+
+    <p class="mt-3 mb-0">
+
+        {{ filename }}
+
+    </p>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- HISTOGRAMS -->
+
+
+<div class="card-modern mb-5">
+
+
+<h3>
+
+<i class="bi bi-bar-chart"></i>
+
+Numerical Distributions
+
+</h3>
+
+
+<p class="mt-2">
+
+Histograms show how numerical values are distributed across the dataset.
+
 </p>
 
-<hr>
 
 
-<h3>Histograms</h3>
+<div class="row g-4 mt-3">
 
-<p>
-    Histograms show how numerical values are distributed across the dataset.
-</p>
+
 
 {% if histogram_paths %}
 
-    {% for chart in histogram_paths %}
 
-        <h4>
-            {{ chart.split('/')[-1]
-                .replace('_histogram.png', '')
-                .replace('_', ' ')
-                .title()
-            }}
-        </h4>
+{% for chart in histogram_paths %}
 
-        <img
-            src="{{ url_for('static', filename=chart) }}"
-            style="max-width: 100%; height: auto;"
-            alt="Histogram"
-        >
 
-        <hr>
 
-    {% endfor %}
+<div class="col-lg-6">
+
+
+<div class="card-modern">
+
+
+<h4>
+
+
+{{ chart.split('/')[-1]
+.replace('_histogram.png','')
+.replace('_',' ')
+.title()
+}}
+
+
+</h4>
+
+
+
+<img
+src="{{ url_for('static', filename=chart) }}"
+class="img-fluid mt-3"
+alt="Histogram"
+>
+
+
+</div>
+
+
+</div>
+
+
+
+{% endfor %}
+
+
 
 {% else %}
 
-    <p>
-        No suitable numerical columns were found for histograms.
-    </p>
+
+<p>
+
+No suitable numerical columns were found for histograms.
+
+</p>
+
 
 {% endif %}
 
 
-<h3>Box Plots</h3>
 
-<p>
-    Box plots help identify the spread of numerical values and potential outliers.
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- BOX PLOTS -->
+
+
+<div class="card-modern mb-5">
+
+
+<h3>
+
+<i class="bi bi-graph-up"></i>
+
+Outlier Detection
+
+</h3>
+
+
+
+<p class="mt-2">
+
+Box plots show data spread and help identify unusual values.
+
 </p>
+
+
+
+
+<div class="row g-4 mt-3">
+
+
 
 {% if boxplot_paths %}
 
-    {% for chart in boxplot_paths %}
 
-        <h4>
-            {{ chart.split('/')[-1]
-                .replace('_boxplot.png', '')
-                .replace('_', ' ')
-                .title()
-            }}
-        </h4>
 
-        <img
-            src="{{ url_for('static', filename=chart) }}"
-            style="max-width: 100%; height: auto;"
-            alt="Box Plot"
-        >
+{% for chart in boxplot_paths %}
 
-        <hr>
 
-    {% endfor %}
+
+<div class="col-lg-6">
+
+
+<div class="card-modern">
+
+
+<h4>
+
+
+{{ chart.split('/')[-1]
+.replace('_boxplot.png','')
+.replace('_',' ')
+.title()
+}}
+
+
+</h4>
+
+
+
+<img
+src="{{ url_for('static', filename=chart) }}"
+class="img-fluid mt-3"
+alt="Box Plot"
+>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+{% endfor %}
+
+
 
 {% else %}
 
-    <p>
-        No suitable numerical columns were found for box plots.
-    </p>
+
+
+<p>
+
+No suitable numerical columns were found for box plots.
+
+</p>
+
+
 
 {% endif %}
 
 
-<h3>Correlation Heatmap</h3>
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- HEATMAP -->
+
+
+<div class="card-modern mb-5">
+
+
+<h3>
+
+<i class="bi bi-grid-3x3-gap"></i>
+
+Variable Relationships
+
+</h3>
+
+
 
 <p>
-    The correlation heatmap shows relationships between numerical variables.
+
+Correlation heatmaps show relationships between numerical variables.
+
 </p>
+
+
 
 {% if heatmap_path %}
 
-    <img
-        src="{{ url_for('static', filename=heatmap_path) }}"
-        style="max-width: 100%; height: auto;"
-        alt="Correlation Heatmap"
-    >
+
+
+<img
+src="{{ url_for('static', filename=heatmap_path) }}"
+class="img-fluid mt-4"
+alt="Correlation Heatmap"
+>
+
+
+
 
 {% else %}
 
-    <p>
-        A correlation heatmap could not be generated because
-        the dataset does not contain enough numerical columns.
-    </p>
+
+
+<p>
+
+A correlation heatmap could not be generated because the dataset does not contain enough numerical columns.
+
+</p>
+
+
 
 {% endif %}
 
-<hr>
 
 
-<h3>Bar Charts</h3>
+</div>
+
+
+
+
+
+
+
+
+
+<!-- BAR CHARTS -->
+
+
+<div class="card-modern mb-5">
+
+
+<h3>
+
+<i class="bi bi-pie-chart"></i>
+
+Category Analysis
+
+</h3>
+
+
 
 <p>
-    Bar charts show the frequency of categories in categorical columns.
+
+Bar charts show the frequency of values in categorical columns.
+
 </p>
+
+
+
+
+<div class="row g-4 mt-3">
+
+
 
 {% if bar_chart_paths %}
 
-    {% for chart in bar_chart_paths %}
 
-        <h4>
-            {{ chart.split('/')[-1]
-                .replace('_bar_chart.png', '')
-                .replace('_', ' ')
-                .title()
-            }}
-        </h4>
 
-        <img
-            src="{{ url_for('static', filename=chart) }}"
-            style="max-width: 100%; height: auto;"
-            alt="Bar Chart"
-        >
+{% for chart in bar_chart_paths %}
 
-        <hr>
 
-    {% endfor %}
+
+<div class="col-lg-6">
+
+
+<div class="card-modern">
+
+
+<h4>
+
+
+{{ chart.split('/')[-1]
+.replace('_bar_chart.png','')
+.replace('_',' ')
+.title()
+}}
+
+
+</h4>
+
+
+
+<img
+src="{{ url_for('static', filename=chart) }}"
+class="img-fluid mt-3"
+alt="Bar Chart"
+>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+{% endfor %}
+
+
 
 {% else %}
 
-    <p>
-        No suitable categorical columns were found for bar charts.
-    </p>
+
+
+<p>
+
+No suitable categorical columns were found for bar charts.
+
+</p>
+
+
 
 {% endif %}
 
 
-<hr>
 
-<a href="{{ url_for('overview') }}">
-    <button>Back to Dataset Overview</button>
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- NAVIGATION -->
+
+
+<div class="d-flex justify-content-between">
+
+
+<a
+href="{{ url_for('quality') }}"
+class="btn-outline-custom text-decoration-none"
+>
+
+← Data Quality
+
 </a>
 
-<a href="{{ url_for('quality') }}">
-    <button>Back to Data Quality</button>
+
+
+
+<a
+href="{{ url_for('insights') }}"
+class="btn-primary-custom text-decoration-none"
+>
+
+Continue to AI Insights
+
+<i class="bi bi-arrow-right"></i>
+
 </a>
 
-<hr>
 
-<a href="{{ url_for('insights') }}">
-    <button>Next → AI Insights</button>
-</a>
+</div>
 
-<hr>
 
-<a href="{{ url_for('ask') }}">
-    <button>
-        Next → Ask DataMind
-    </button>
-</a>
+
+
 
 {% endblock %}

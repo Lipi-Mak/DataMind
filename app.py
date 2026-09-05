@@ -450,9 +450,11 @@ def ask():
 
     )
 
-    
+
 @app.route("/insights")
 def insights():
+
+    print("INSIGHTS PAGE LOADED")
 
     if "dataset_path" not in session:
         return redirect(url_for("home"))

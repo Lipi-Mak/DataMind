@@ -1,244 +1,452 @@
 {% extends "base.html" %}
 
+
+
 {% block title %}
+
 Ask DataMind
+
 {% endblock %}
+
+
+
 
 {% block content %}
 
-<h2>Ask DataMind</h2>
 
-<p><strong>Dataset:</strong> {{ filename }}</p>
 
-<hr>
+<!-- HEADER -->
 
-<form 
-    method="POST"
-    id="ask-form"
->
 
-<div
-    id="loading-message"
-    style="display: none;"
->
-    DataMind is analyzing your question...
+<div class="mb-5">
+
+
+<h1>
+
+Ask DataMind
+
+</h1>
+
+
+<p class="fs-5">
+
+Chat with your dataset and get answers using AI-powered analysis.
+
+</p>
+
+
 </div>
 
-    <input
-        type="text"
-        name="question"
-        placeholder="Ask something about your dataset..."
-        value="{{ question }}"
-        style="width:500px;"
-        required
-    >
 
-    <!--
-        This field is empty for manually typed questions.
 
-        Suggested questions will fill this field with
-        a known operation so Ollama is not needed.
-    -->
 
-    <input
-        type="hidden"
-        name="suggested_operation"
-        id="suggested_operation"
-        value=""
-    >
 
-    <input
-        type="hidden"
-        name="suggested_column"
-        id="suggested_column"
-        value=""
-    >
 
-    <button type="submit">
-        Ask
-    </button>
+
+
+
+<!-- DATASET -->
+
+
+<div class="card-modern mb-5">
+
+
+<h3>
+
+<i class="bi bi-file-earmark-spreadsheet"></i>
+
+Dataset
+
+</h3>
+
+
+<p class="mt-3 mb-0">
+
+{{ filename }}
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- ASK CARD -->
+
+
+<div class="card-modern mb-5">
+
+
+<h3>
+
+Ask a Question
+
+</h3>
+
+
+
+<form
+method="POST"
+id="ask-form"
+>
+
+
+
+<div
+id="loading-message"
+class="alert alert-info mt-4"
+style="display:none;"
+>
+
+<i class="bi bi-hourglass-split"></i>
+
+DataMind is analyzing your question...
+
+</div>
+
+
+
+
+<input
+type="text"
+name="question"
+class="form-control mt-4"
+placeholder="Example: What is the average salary?"
+value="{{ question }}"
+required
+>
+
+
+
+
+<input
+type="hidden"
+name="suggested_operation"
+id="suggested_operation"
+value=""
+>
+
+
+
+<input
+type="hidden"
+name="suggested_column"
+id="suggested_column"
+value=""
+>
+
+
+
+
+<button
+type="submit"
+class="btn-primary-custom mt-4"
+>
+
+
+<i class="bi bi-send"></i>
+
+Ask DataMind
+
+
+</button>
+
 
 </form>
 
 
-<div class="suggested-questions">
-
-    <p>Try asking:</p>
-
-
-    <!-- ROW COUNT -->
-
-    <button
-        type="button"
-        onclick="askSuggestedQuestion(
-            'How many rows are there?',
-            'row_count',
-            'None'
-        )">
-
-        How many rows are there?
-
-    </button>
-
-
-    <!-- AVERAGE SALARY -->
-
-    <button
-        type="button"
-        onclick="askSuggestedQuestion(
-            'What is the average salary?',
-            'average',
-            'Salary'
-        )">
-
-        What is the average salary?
-
-    </button>
-
-
-    <!-- MOST COMMON DEPARTMENT -->
-
-    <button
-        type="button"
-        onclick="askSuggestedQuestion(
-            'Which department appears most often?',
-            'most_common',
-            'Department'
-        )">
-
-        Which department appears most often?
-
-    </button>
-
-
-    <!-- MISSING VALUES -->
-
-    <button
-        type="button"
-        onclick="askSuggestedQuestion(
-            'How many missing values are there?',
-            'missing_values',
-            'None'
-        )">
-
-        How many missing values are there?
-
-    </button>
-
-
-    <!-- UNIQUE DEPARTMENTS -->
-
-    <button
-        type="button"
-        onclick="askSuggestedQuestion(
-            'How many unique departments are there?',
-            'unique_count',
-            'Department'
-        )">
-
-        How many unique departments are there?
-
-    </button>
 
 </div>
 
 
-<hr>
+
+
+
+
+
+
+
+<!-- SUGGESTIONS -->
+
+
+<div class="card-modern mb-5">
+
+
+<h3>
+
+<i class="bi bi-lightbulb"></i>
+
+Suggested Questions
+
+</h3>
+
+
+<p>
+
+Try asking DataMind:
+
+</p>
+
+
+
+
+<div class="d-flex flex-wrap gap-3 mt-4">
+
+
+
+
+
+<button
+class="btn-outline-custom"
+onclick="askSuggestedQuestion(
+'How many rows are there?',
+'row_count',
+'None'
+)"
+>
+
+How many rows?
+
+</button>
+
+
+
+
+
+<button
+class="btn-outline-custom"
+onclick="askSuggestedQuestion(
+'What is the average salary?',
+'average',
+'Salary'
+)"
+>
+
+Average salary?
+
+</button>
+
+
+
+
+
+<button
+class="btn-outline-custom"
+onclick="askSuggestedQuestion(
+'Which department appears most often?',
+'most_common',
+'Department'
+)"
+>
+
+Most common department?
+
+</button>
+
+
+
+
+
+<button
+class="btn-outline-custom"
+onclick="askSuggestedQuestion(
+'How many missing values are there?',
+'missing_values',
+'None'
+)"
+>
+
+Missing values?
+
+</button>
+
+
+
+
+
+<button
+class="btn-outline-custom"
+onclick="askSuggestedQuestion(
+'How many unique departments are there?',
+'unique_count',
+'Department'
+)"
+>
+
+Unique departments?
+
+</button>
+
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- ERROR -->
 
 
 {% if error %}
 
+
 <div class="alert alert-warning">
 
-    {{ error }}
+
+{{ error }}
+
 
 </div>
 
+
 {% endif %}
+
+
+
+
+
+
+
+
+
+<!-- ANSWER -->
 
 
 {% if answer %}
 
-<h3>Answer</h3>
 
-<p>{{ answer }}</p>
+
+<div class="card-modern">
+
+
+<h3>
+
+<i class="bi bi-robot"></i>
+
+DataMind's Answer
+
+</h3>
+
+
+
+
+<div class="mt-4">
+
+
+<p>
+
+{{ answer }}
+
+</p>
+
+
+</div>
+
+
+
+</div>
+
+
 
 {% endif %}
 
 
+
+
+
+
+
+
+
 <script>
 
-    const askForm = document.getElementById(
-        "ask-form"
-    );
-    
-    const loadingMessage = document.getElementById(
-        "loading-message"
-    );
-    
-    
-    askForm.addEventListener(
-        "submit",
-        function() {
-    
-            loadingMessage.style.display = "block";
-    
-        }
-    );
+
+const askForm = document.getElementById(
+    "ask-form"
+);
+
+
+const loadingMessage = document.getElementById(
+    "loading-message"
+);
+
+
+
+askForm.addEventListener(
+    "submit",
+    function(){
+
+        loadingMessage.style.display="block";
+
+    }
+);
+
+
+
+
 
 function askSuggestedQuestion(
     question,
     operation,
     column
-) {
-
-    /*
-        Find the question input.
-    */
-
-    const questionInput = document.querySelector(
-        'input[name="question"]'
-    );
+){
 
 
-    /*
-        Find the hidden operation input.
-    */
-
-    const operationInput = document.querySelector(
-        'input[name="suggested_operation"]'
-    );
+const questionInput =
+document.querySelector(
+'input[name="question"]'
+);
 
 
-    /*
-        Find the hidden column input.
-    */
 
-    const columnInput = document.querySelector(
-        'input[name="suggested_column"]'
-    );
+const operationInput =
+document.querySelector(
+'input[name="suggested_operation"]'
+);
 
 
-    /*
-        Fill the inputs.
-    */
 
-    questionInput.value = question;
-
-    operationInput.value = operation;
-
-    columnInput.value = column;
+const columnInput =
+document.querySelector(
+'input[name="suggested_column"]'
+);
 
 
-    /*
-        Submit the form.
-    */
 
-    questionInput.form.requestSubmit();
+questionInput.value = question;
+
+
+operationInput.value = operation;
+
+
+columnInput.value = column;
+
+
+
+questionInput.form.requestSubmit();
+
+
 
 }
 
+
 </script>
+
 
 
 {% endblock %}
