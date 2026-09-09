@@ -125,70 +125,6 @@ Questions unrelated to the uploaded dataset are rejected rather than answered us
 
 ---
 
-## Application Workflow
-
-```text
-                 CSV Upload
-                     |
-                     v
-              Dataset Overview
-                     |
-                     v
-              Data Quality Check
-                     |
-                     v
-               Visualizations
-                     |
-                     v
-              Automated Insights
-                     |
-          +----------+----------+
-          |                     |
-          v                     v
-    Detected Findings      Ask DataMind
-          |                     |
-          +----------+----------+
-                     |
-                     v
-             Local AI Explanation
-```
-
----
-
-## AI Architecture
-
-DataMind follows a **Python-first, AI-second** approach.
-
-```text
-                    User Dataset
-                         |
-                         v
-                 Python / Pandas
-                         |
-             +-----------+-----------+
-             |           |           |
-             v           v           v
-          Statistics   Outliers   Relationships
-             |           |           |
-             +-----------+-----------+
-                         |
-                         v
-                 Verified Findings
-                         |
-                         v
-                    Ollama LLM
-                         |
-                         v
-              Natural-Language Explanation
-```
-
-The language model does not serve as the primary source of numerical truth.
-
-Instead, Python performs the analysis first. The resulting findings are then provided to Ollama for explanation.
-
-This architecture makes the AI component more controlled and reduces the risk of unsupported numerical claims.
-
----
 
 ## Technology Stack
 
@@ -289,66 +225,6 @@ DataMind/
 
 ---
 
-## Getting Started
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/Lipi-Mak/DataMind.git
-cd DataMind
-```
-
-### 2. Create a virtual environment
-
-#### macOS / Linux
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-#### Windows
-
-```bash
-python -m venv .venv
-.venv\Scripts\activate
-```
-
-### 3. Install Python dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Install Ollama
-
-Install Ollama separately on your system.
-
-Then download the model used by DataMind:
-
-```bash
-ollama pull llama3.2:3b
-```
-
-If Ollama is not already running, start its local server:
-
-```bash
-ollama serve
-```
-
-Keep the Ollama process running while using the AI-powered features of DataMind.
-
-### 5. Start DataMind
-
-Open another terminal with the virtual environment activated:
-
-```bash
-python app.py
-```
-
-Then open the local Flask address shown in your terminal.
-
----
 
 ## Using DataMind
 
@@ -440,34 +316,6 @@ AI-generated responses are based on findings already calculated by the analysis 
 
 The interface is designed to make common data-analysis tasks accessible without requiring users to write Python or SQL.
 
----
-
-## Current Limitations
-
-DataMind is currently designed for CSV-based exploratory data analysis.
-
-Some limitations include:
-
-* The application currently focuses on CSV datasets.
-* AI-powered features require a locally installed Ollama model.
-* The supported question types are limited to operations implemented by the question-answering system.
-* Statistical findings are intended for exploratory analysis rather than formal statistical inference.
-* Correlation findings represent association and should not be interpreted as causation.
-
----
-
-## Future Improvements
-
-Potential future development areas include:
-
-* More advanced dataset profiling
-* Additional visualization types
-* Expanded natural-language question support
-* Improved handling of larger datasets
-* More configurable AI models
-* Exportable analysis reports
-* Additional automated statistical tests
-* Deployment support
 
 ---
 
