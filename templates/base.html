@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}DataMind{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/datamind.css') }}">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <a href="{{ url_for('home') }}" class="brand" aria-label="DataMind home">
+        <span class="brand-mark">D</span>
+        <span class="brand-copy"><span class="brand-name">DataMind</span><span class="brand-tagline">Your AI Data Analyst</span></span>
+      </a>
+      <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="workflow-nav"><i class="bi bi-list"></i></button>
+      <nav class="workflow-nav" id="workflow-nav" aria-label="Analysis workflow">
+        <a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">Upload</a>
+        <a href="{{ url_for('overview') }}" class="{% if request.endpoint == 'overview' %}active{% endif %}">Overview</a>
+        <a href="{{ url_for('quality') }}" class="{% if request.endpoint == 'quality' %}active{% endif %}">Quality</a>
+        <a href="{{ url_for('visualizations') }}" class="{% if request.endpoint == 'visualizations' %}active{% endif %}">Visualizations</a>
+        <a href="{{ url_for('insights') }}" class="{% if request.endpoint == 'insights' %}active{% endif %}">AI Insights</a>
+        <a href="{{ url_for('ask') }}" class="ask-link {% if request.endpoint == 'ask' %}active{% endif %}">Ask DataMind</a>
+      </nav>
+    </div>
+  </header>
+  <main class="app-main page-enter">{% block content %}{% endblock %}</main>
+  <script>
+    const toggle = document.querySelector('.nav-toggle');
+    const nav = document.getElementById('workflow-nav');
+    if (toggle && nav) toggle.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}AI Insights — DataMind{% endblock %}
+{% block content %}
+<header class="page-head">
+  <div><div class="eyebrow">AI insights</div><h1>What the data says</h1><p class="lead">Patterns, anomalies, and relationships organized for focused reading.</p></div>
+  <div class="dataset-chip"><i class="bi bi-file-earmark-spreadsheet"></i><span>{{ filename }}</span></div>
+</header>
+<section class="surface section">
+  <div class="section-head"><div><div class="section-title"><i class="bi bi-search"></i><h2>Data findings</h2></div><p class="section-copy">Calculated directly from your dataset.</p></div></div>
+  <ul class="findings-list">{% for insight in factual_insights %}<li>{{ insight }}</li>{% endfor %}</ul>
+</section>
+<section class="surface section">
+  <div class="section-head"><div><div class="section-title"><i class="bi bi-lightbulb"></i><h2>Key findings</h2></div><p class="section-copy">The highest-priority patterns identified by DataMind.</p></div></div>
+  {% if key_findings %}<div class="finding-grid">{% for finding in key_findings %}<article class="finding"><div class="finding-meta"><span class="badge">{{ finding.type }}</span><span>Priority {{ finding.priority }}</span></div><h3>{{ finding.title }}</h3><p>{{ finding.description }}</p></article>{% endfor %}</div>{% else %}<p>No significant findings were identified.</p>{% endif %}
+</section>
+<section class="surface section reading-panel">
+  <div class="section-head"><div><div class="section-title"><i class="bi bi-robot"></i><h2>DataMind explanation</h2></div><p class="section-copy">A plain-language interpretation of the key findings.</p></div></div>
+  <div class="ai-copy">{{ ai_key_findings | replace('**','') | replace('\n','<br>') | safe }}</div>
+</section>
+<section class="surface section reading-panel">
+  <div class="section-head"><div><div class="section-title"><i class="bi bi-stars"></i><h2>AI analysis</h2></div></div>
+  <div class="ai-copy">{{ ai_analysis | replace('**','') | replace('Key Observations','<strong class="ai-heading">Key Observations</strong>') | replace('Important Patterns','<strong class="ai-heading">Important Patterns</strong>') | replace('Recommendations','<strong class="ai-heading">Recommendations</strong>') | replace('\n','<br>') | safe }}</div>
+</section>
+<section class="surface section">
+  <div class="section-head"><div class="section-title"><i class="bi bi-exclamation-circle"></i><h2>Detected outliers</h2></div></div>
+  {% if outliers %}<div class="detail-grid">{% for outlier in outliers %}<article class="detail-card"><h3>{{ outlier["column"] }}</h3><p><strong>Unusual values:</strong> {{ outlier["count"] }}</p><p><strong>Detected values:</strong> {{ outlier["values"] }}</p></article>{% endfor %}</div>{% else %}<p>No unusual values were detected.</p>{% endif %}
+</section>
+<section class="surface section">
+  <div class="section-head"><div class="section-title"><i class="bi bi-diagram-3"></i><h2>Detected relationships</h2></div></div>
+  {% if relationship_findings %}<div class="detail-grid">{% for relationship in relationship_findings %}<article class="detail-card"><h3>{{ relationship.column_a }} &amp; {{ relationship.column_b }}</h3><p><strong>Correlation:</strong> {{ "%.2f"|format(relationship.correlation) }}</p><p><strong>Direction:</strong> {{ relationship.relationship }}</p><p><strong>Strength:</strong> {{ relationship.strength }}</p></article>{% endfor %}</div>{% else %}<p>No strong relationships between numerical columns were detected.</p>{% endif %}
+</section>
+<div class="navigation-row"><a href="{{ url_for('visualizations') }}" class="btn-outline-custom"><i class="bi bi-arrow-left"></i> Visualizations</a><a href="{{ url_for('ask') }}" class="btn-primary-custom">Continue to Ask DataMind <i class="bi bi-arrow-right"></i></a></div>
+{% endblock %}

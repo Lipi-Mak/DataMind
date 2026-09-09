@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}DataMind — AI Data Analyst{% endblock %}
+{% block content %}
+<section class="home-shell">
+  <div class="home-intro">
+    <div class="eyebrow">AI data analyst</div>
+    <h1>Understand your data. <span>Instantly.</span></h1>
+    <p class="lead">Upload a CSV dataset and discover insights, patterns, quality issues, and relationships without writing code.</p>
+    <div class="capabilities" aria-label="Capabilities">
+      <div class="capability"><strong>AI</strong><span>Powered analysis</span></div>
+      <div class="capability"><strong>CSV</strong><span>Dataset support</span></div>
+      <div class="capability"><strong>Automatic</strong><span>Insight generation</span></div>
+    </div>
+  </div>
+  <div class="surface upload-panel">
+    <div class="upload-panel-header"><h2>Upload dataset</h2><p class="section-copy">Select your CSV file to begin the analysis.</p></div>
+    <form method="POST" enctype="multipart/form-data">
+      <label class="drop-zone">
+        <span>
+          <span class="drop-icon"><i class="bi bi-file-earmark-bar-graph"></i></span>
+          <strong>Choose your CSV dataset</strong>
+          <span class="section-copy" style="display:block">Your file stays connected to this analysis session.</span>
+          <input class="file-input" type="file" name="dataset" accept=".csv" required>
+        </span>
+      </label>
+      <button type="submit" class="btn-primary-custom w-full" style="margin-top:14px"><i class="bi bi-upload"></i> Upload dataset</button>
+    </form>
+    {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+  </div>
+</section>
+{% endblock %}

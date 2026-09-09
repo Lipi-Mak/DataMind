@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Visualizations — DataMind{% endblock %}
+{% block content %}
+<header class="page-head">
+  <div><div class="eyebrow">Visualization engine</div><h1>See the patterns</h1><p class="lead">Explore distributions, outliers, relationships, and category frequencies in your dataset.</p></div>
+  <div class="dataset-chip"><i class="bi bi-file-earmark-bar-graph"></i><span>{{ filename }}</span></div>
+</header>
+<section class="surface chart-section section">
+  <div class="section-head"><div><div class="section-title"><i class="bi bi-bar-chart"></i><h2>Numerical distributions</h2></div><p class="section-copy">Histograms show how numerical values are distributed.</p></div></div>
+  {% if histogram_paths %}<div class="chart-grid">{% for chart in histogram_paths %}<article class="chart-item"><h3>{{ chart.split('/')[-1].replace('_histogram.png','').replace('_',' ').title() }}</h3><img src="{{ url_for('static', filename=chart) }}" alt="Histogram for {{ chart.split('/')[-1].replace('_histogram.png','').replace('_',' ').title() }}" loading="lazy"></article>{% endfor %}</div>{% else %}<p class="empty-state">No suitable numerical columns were found for histograms.</p>{% endif %}
+</section>
+<section class="surface chart-section section">
+  <div class="section-head"><div><div class="section-title"><i class="bi bi-graph-up"></i><h2>Outlier detection</h2></div><p class="section-copy">Box plots reveal spread and unusual values.</p></div></div>
+  {% if boxplot_paths %}<div class="chart-grid">{% for chart in boxplot_paths %}<article class="chart-item"><h3>{{ chart.split('/')[-1].replace('_boxplot.png','').replace('_',' ').title() }}</h3><img src="{{ url_for('static', filename=chart) }}" alt="Box plot for {{ chart.split('/')[-1].replace('_boxplot.png','').replace('_',' ').title() }}" loading="lazy"></article>{% endfor %}</div>{% else %}<p class="empty-state">No suitable numerical columns were found for box plots.</p>{% endif %}
+</section>
+<section class="surface chart-section section">
+  <div class="section-head"><div><div class="section-title"><i class="bi bi-grid-3x3-gap"></i><h2>Variable relationships</h2></div><p class="section-copy">The correlation heatmap compares numerical variables.</p></div></div>
+  {% if heatmap_path %}<div class="chart-single"><img src="{{ url_for('static', filename=heatmap_path) }}" alt="Correlation heatmap" loading="lazy"></div>{% else %}<p class="empty-state">A correlation heatmap could not be generated because the dataset does not contain enough numerical columns.</p>{% endif %}
+</section>
+<section class="surface chart-section section">
+  <div class="section-head"><div><div class="section-title"><i class="bi bi-pie-chart"></i><h2>Category analysis</h2></div><p class="section-copy">Bar charts show frequencies in categorical columns.</p></div></div>
+  {% if bar_chart_paths %}<div class="chart-grid">{% for chart in bar_chart_paths %}<article class="chart-item"><h3>{{ chart.split('/')[-1].replace('_bar_chart.png','').replace('_',' ').title() }}</h3><img src="{{ url_for('static', filename=chart) }}" alt="Bar chart for {{ chart.split('/')[-1].replace('_bar_chart.png','').replace('_',' ').title() }}" loading="lazy"></article>{% endfor %}</div>{% else %}<p class="empty-state">No suitable categorical columns were found for bar charts.</p>{% endif %}
+</section>
+<div class="navigation-row"><a href="{{ url_for('quality') }}" class="btn-outline-custom"><i class="bi bi-arrow-left"></i> Data quality</a><a href="{{ url_for('insights') }}" class="btn-primary-custom">Continue to AI insights <i class="bi bi-arrow-right"></i></a></div>
+{% endblock %}

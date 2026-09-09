@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Dataset Overview — DataMind{% endblock %}
+{% block content %}
+<header class="page-head">
+  <div><div class="eyebrow">Dataset overview</div><h1>Structure at a glance</h1><p class="lead">A compact view of the dataset before deeper analysis.</p></div>
+  <div class="dataset-chip"><i class="bi bi-file-earmark-spreadsheet"></i><span>{{ filename }}</span></div>
+</header>
+<div class="metric-grid">
+  <div class="surface metric"><div class="metric-label">Rows</div><div class="metric-value">{{ overview.rows }}</div><div class="metric-note">Records detected</div></div>
+  <div class="surface metric"><div class="metric-label">Columns</div><div class="metric-value">{{ overview.columns }}</div><div class="metric-note">Fields available</div></div>
+  <div class="surface metric"><div class="metric-label">Memory usage</div><div class="metric-value">{{ overview.memory_usage }}</div><div class="metric-note">Kilobytes</div></div>
+</div>
+<section class="surface section">
+  <div class="section-head"><div><div class="section-title"><i class="bi bi-layout-three-columns"></i><h2>Columns</h2></div><p class="section-copy">Fields detected in the uploaded dataset.</p></div></div>
+  <div class="tag-list">{% for column in overview.column_names %}<span class="data-tag">{{ column }}</span>{% endfor %}</div>
+</section>
+<section class="surface section">
+  <div class="section-head"><div><div class="section-title"><i class="bi bi-code-square"></i><h2>Data types</h2></div></div></div>
+  <div class="table-wrap"><table><thead><tr><th>Column</th><th>Type</th></tr></thead><tbody>{% for column, datatype in overview.data_types.items() %}<tr><td>{{ column }}</td><td>{{ datatype }}</td></tr>{% endfor %}</tbody></table></div>
+</section>
+<section class="surface section">
+  <div class="section-head"><div><div class="section-title"><i class="bi bi-table"></i><h2>First 5 rows</h2></div><p class="section-copy">A preview of the source data.</p></div></div>
+  <div class="table-wrap">{{ overview.preview | safe }}</div>
+</section>
+<div class="navigation-row end"><a href="{{ url_for('quality') }}" class="btn-primary-custom">Continue to data quality <i class="bi bi-arrow-right"></i></a></div>
+{% endblock %}

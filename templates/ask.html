@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Ask DataMind{% endblock %}
+{% block content %}
+<div class="ask-shell">
+  <header class="page-head">
+    <div><div class="eyebrow">Ask DataMind</div><h1>Talk to your dataset</h1><p class="lead">Ask a plain-language question and get an answer grounded in your uploaded data.</p></div>
+    <div class="dataset-chip"><i class="bi bi-file-earmark-spreadsheet"></i><span>{{ filename }}</span></div>
+  </header>
+  <section class="surface ask-panel">
+    <span class="ask-label">Natural-language analysis</span>
+    <h2 style="margin-top:14px">What would you like to know?</h2>
+    <p class="section-copy">DataMind will analyze the current dataset to answer your question.</p>
+    <form method="POST" id="ask-form">
+      <div class="question-row">
+        <input class="question-input" type="text" name="question" placeholder="Example: What is the average salary?" value="{{ question }}" required aria-label="Question for DataMind">
+        <input type="hidden" name="suggested_operation" id="suggested_operation" value="">
+        <input type="hidden" name="suggested_column" id="suggested_column" value="">
+        <button type="submit" class="btn-primary-custom"><i class="bi bi-send"></i> Ask DataMind</button>
+      </div>
+      <div id="loading-message" class="loading-message"><i class="bi bi-hourglass-split"></i> DataMind is analyzing your question...</div>
+    </form>
+  </section>
+  <section class="surface section" style="margin-top:18px">
+    <div class="section-title"><i class="bi bi-lightbulb"></i><h2>Suggested questions</h2></div>
+    <div class="suggestion-list">
+      <button class="suggestion" type="button" onclick="askSuggestedQuestion('How many rows are there?','row_count','None')">How many rows?</button>
+      <button class="suggestion" type="button" onclick="askSuggestedQuestion('What is the average salary?','average','Salary')">Average salary?</button>
+      <button class="suggestion" type="button" onclick="askSuggestedQuestion('Which department appears most often?','most_common','Department')">Most common department?</button>
+      <button class="suggestion" type="button" onclick="askSuggestedQuestion('How many missing values are there?','missing_values','None')">Missing values?</button>
+      <button class="suggestion" type="button" onclick="askSuggestedQuestion('How many unique departments are there?','unique_count','Department')">Unique departments?</button>
+    </div>
+  </section>
+  {% if error %}<div class="alert alert-warning">{{ error }}</div>{% endif %}
+  {% if answer %}<section class="answer-panel" aria-live="polite"><div class="section-title"><i class="bi bi-robot"></i><h2>DataMind's answer</h2></div><div class="answer-body"><p>{{ answer }}</p></div></section>{% endif %}
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  const askForm = document.getElementById("ask-form");
+  const loadingMessage = document.getElementById("loading-message");
+  if (askForm && loadingMessage) askForm.addEventListener("submit", () => { loadingMessage.style.display = "block"; });
+  function askSuggestedQuestion(question, operation, column) {
+    const questionInput = document.querySelector('input[name="question"]');
+    const operationInput = document.querySelector('input[name="suggested_operation"]');
+    const columnInput = document.querySelector('input[name="suggested_column"]');
+    if (!questionInput || !operationInput || !columnInput || !questionInput.form) return;
+    questionInput.value = question;
+    operationInput.value = operation;
+    columnInput.value = column;
+    questionInput.form.requestSubmit();
+  }
+</script>
+{% endblock %}

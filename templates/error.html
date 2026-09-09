@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Error — DataMind</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/datamind.css') }}">
+</head>
+<body><main class="app-main" style="min-height:100vh;display:grid;place-items:center"><section class="surface section" style="max-width:520px;text-align:center"><div class="eyebrow" style="justify-content:center">DataMind</div><h1>Something went wrong</h1><p class="lead" style="margin:12px auto 0">{{ message }}</p><a href="{{ url_for('home') }}" class="btn-primary-custom" style="margin-top:22px">Return to DataMind</a></section></main></body>
+</html>
