@@ -12,7 +12,7 @@ except ImportError:  # pragma: no cover - used outside Streamlit
     st = None
 
 
-MODEL_NAME = "gemini-2.5-flash-lite"
+MODEL_NAME = "gemini-3.5-flash-lite"
 
 
 def _get_api_key():
