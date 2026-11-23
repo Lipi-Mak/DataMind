@@ -2,337 +2,136 @@
 
 ### Your AI Data Analyst
 
-DataMind is a Flask-based web application that helps users understand CSV datasets through automated data analysis, visualizations, statistical findings, and natural-language explanations.
+DataMind is a Streamlit application that helps people understand CSV datasets without writing code. Upload a dataset to explore its structure, data quality, visual patterns, statistical findings, relationships, and potential outliers.
 
-Instead of requiring users to manually inspect a dataset, DataMind organizes the analysis into a simple workflow: upload a CSV, understand its structure and quality, explore visual patterns, review important findings, and ask questions about the data.
-
-The application uses Python for factual and statistical analysis and a locally running Ollama model for natural-language explanations.
-
----
-
-## Overview
-
-Data analysis often requires switching between spreadsheets, Python scripts, visualization tools, and statistical methods just to answer basic questions about a dataset.
-
-DataMind brings these steps together into one interface.
-
-The application:
-
-1. Accepts a CSV dataset
-2. Profiles the dataset
-3. Checks data quality
-4. Generates visualizations
-5. Detects important findings and unusual values
-6. Identifies relationships between numerical variables
-7. Uses local AI to explain verified findings
-8. Allows users to ask questions about their dataset
-
-A key design principle is that **Python performs the actual calculations while the AI explains the results**. This helps prevent the language model from inventing statistics or performing unsupported calculations.
-
----
+DataMind follows a simple principle: **Python performs the factual analysis, while AI explains verified results.** This keeps calculations reproducible and reduces unsupported AI-generated claims.
 
 ## Features
 
-### Dataset Upload
+- Upload CSV datasets through a simple interface
+- View dataset size, columns, missing values, and duplicate rows
+- Inspect a clean dataset preview and column information
+- Check data quality and identify potential outliers using the IQR method
+- Explore histograms, box plots, category charts, and correlation heatmaps
+- Review factual insights and relationships between numerical variables
+- Ask natural-language questions about the uploaded dataset
+- Use Gemini to explain verified findings in beginner-friendly language
 
-Upload a CSV file directly through the web interface.
+## How the AI works
 
-DataMind processes the uploaded dataset and maintains the active dataset throughout the analysis workflow.
+DataMind does not ask the language model to perform the main calculations. Python and Pandas calculate the statistics first. Gemini receives the verified result and explains it in natural language.
 
-### Dataset Overview
+Gemini is used only when the user selects an AI feature, such as **Explain these verified findings** or **Ask DataMind**. The app can still perform its factual analysis, tables, charts, and rule-based insights without an AI key.
 
-Automatically summarizes the structure of the uploaded dataset, including information about its rows, columns, and data characteristics.
+## Technology stack
 
-### Data Quality Analysis
+- Python
+- Streamlit
+- Pandas and NumPy
+- Matplotlib
+- Google Gemini API through `google-genai`
+- Existing Flask/Ollama components retained for the original local version
 
-Analyzes common data-quality issues such as:
+## Run DataMind locally
 
-* Missing values
-* Duplicate rows
-* Column characteristics
-* Dataset completeness
+### 1. Clone the repository
 
-### Automated Visualizations
-
-Generates visualizations based on the available data, including:
-
-* Histograms
-* Box plots
-* Bar charts
-* Correlation heatmaps
-
-The visualization system adapts to the columns available in the uploaded dataset.
-
-### Automated Insights
-
-DataMind generates factual observations directly from the dataset.
-
-These include:
-
-* Dataset size
-* Missing-value information
-* Duplicate-row information
-* Numerical summaries
-* Common categorical values
-* Column classifications
-
-### Outlier Detection
-
-Numerical columns are analyzed for potential outliers using the Interquartile Range (IQR) method.
-
-DataMind reports the detected values and relevant statistical boundaries.
-
-### Relationship Detection
-
-DataMind analyzes numerical variables for relationships using correlation analysis.
-
-Detected relationships include:
-
-* Variables involved
-* Correlation value
-* Relationship direction
-* Relationship strength
-
-### AI-Powered Explanations
-
-DataMind uses a locally running Ollama model to turn verified statistical findings into concise, beginner-friendly explanations.
-
-The AI is intentionally constrained to the results calculated by Python.
-
-It is instructed not to:
-
-* Invent statistics
-* Change numerical results
-* Perform new calculations
-* Treat correlation as causation
-* Introduce unsupported conclusions
-
-This creates a separation between **data computation** and **natural-language explanation**.
-
-### Ask DataMind
-
-Users can ask questions about their uploaded dataset using natural language.
-
-DataMind:
-
-1. Determines whether the question is relevant to the dataset
-2. Interprets the requested operation
-3. Performs the calculation using Python
-4. Returns the factual result
-5. Uses Ollama to explain the result when appropriate
-
-Questions unrelated to the uploaded dataset are rejected rather than answered using unsupported information.
-
----
-
-
-## Technology Stack
-
-### Backend
-
-* Python
-* Flask
-* Pandas
-* NumPy
-
-### Data Analysis
-
-* Pandas
-* NumPy
-* Statistical analysis
-* IQR-based outlier detection
-* Correlation analysis
-
-### Visualization
-
-* Matplotlib
-
-### AI
-
-* Ollama
-* Llama 3.2 3B
-* Local inference
-
-### Frontend
-
-* HTML
-* Jinja2
-* CSS
-* Bootstrap Icons
-
-### Testing
-
-* Python test suite
-* Dedicated tests for AI-related functionality
-* Outlier detection tests
-* Relationship detection tests
-* Key-finding tests
-* Understanding/question-processing tests
-
----
-
-## Project Structure
-
-```text
-DataMind/
-│
-├── app.py
-├── requirements.txt
-├── README.md
-├── .gitignore
-│
-├── datasets/
-│   └── employees.csv
-│
-├── templates/
-│   ├── base.html
-│   ├── index.html
-│   ├── overview.html
-│   ├── quality.html
-│   ├── visualizations.html
-│   ├── insights.html
-│   ├── ask.html
-│   └── error.html
-│
-├── static/
-│   ├── css/
-│   │   └── datamind.css
-│   └── charts/
-│
-├── utils/
-│   ├── analyzer.py
-│   ├── ai_engine.py
-│   ├── file_handler.py
-│   ├── insight_generator.py
-│   ├── key_findings.py
-│   ├── outlier_detector.py
-│   ├── quality_checker.py
-│   ├── question_answerer.py
-│   ├── relationship_detector.py
-│   ├── report_generator.py
-│   └── visualizer.py
-│
-└── tests/
-    ├── test_ai_key_findings.py
-    ├── test_ai_relationships.py
-    ├── test_explanation.py
-    ├── test_key_findings.py
-    ├── test_ollama.py
-    ├── test_outliers.py
-    ├── test_relationships.py
-    └── test_understanding.py
+```bash
+git clone https://github.com/Lipi-Mak/DataMind.git
+cd DataMind
 ```
 
----
+### 2. Create and activate a virtual environment
 
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+On Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+### 3. Install dependencies
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+### 4. Add the Gemini key locally
+
+Create `.streamlit/secrets.toml`:
+
+```toml
+GEMINI_API_KEY = "your-gemini-api-key"
+```
+
+Never commit this file. It is already included in `.gitignore`.
+
+### 5. Start the Streamlit app
+
+```bash
+python -m streamlit run streamlit_app.py
+```
+
+The app will open at `http://localhost:8501`.
 
 ## Using DataMind
 
-### Step 1 — Upload a Dataset
-
-Start with a CSV file containing the data you want to analyze.
-
-A sample dataset is included in:
-
-```text
-datasets/employees.csv
-```
-
-### Step 2 — Review the Dataset
-
-DataMind first provides an overview of the dataset and its structure.
-
-### Step 3 — Check Data Quality
-
-Review missing values, duplicate records, and other basic quality information.
-
-### Step 4 — Explore Visualizations
-
-Use automatically generated charts to explore distributions, categorical values, outliers, and numerical relationships.
-
-### Step 5 — Review Insights
-
-DataMind combines factual analysis, outlier detection, relationship detection, and prioritized findings.
-
-### Step 6 — Ask DataMind
-
-Ask natural-language questions about the uploaded dataset.
-
-For example:
+1. Upload a CSV file.
+2. Review the overview and dataset preview.
+3. Open **Data quality** to inspect missing values and potential outliers.
+4. Open **Visualizations** to explore generated charts.
+5. Open **Insights** to review factual findings and relationships.
+6. Open **Ask DataMind** to ask questions such as:
 
 ```text
 What is the average salary?
-```
-
-```text
 Which department appears most frequently?
-```
-
-```text
 How many rows are in the dataset?
 ```
 
-The factual answer is calculated from the dataset before the AI generates an explanation.
+## Project structure
 
----
-
-## Testing
-
-The repository contains tests covering several components of the analysis and AI pipeline.
-
-Run the test suite with:
-
-```bash
-pytest
+```text
+DataMind/
+├── streamlit_app.py          # Main Streamlit application
+├── app.py                    # Original Flask entry point
+├── requirements.txt
+├── README.md
+├── .streamlit/
+│   ├── config.toml
+│   └── secrets.toml          # Local only; never commit
+├── datasets/                 # Sample datasets
+├── static/                   # Charts and styling assets
+├── templates/                # Original Flask templates
+├── utils/                    # Analysis and AI helpers
+└── tests/                    # Automated tests
 ```
 
-For a more verbose output:
+## Deployment
 
-```bash
-pytest -v
-```
+DataMind can be deployed for free using Streamlit Community Cloud:
 
----
+1. Push the repository to GitHub.
+2. Create a new Streamlit app from the repository.
+3. Set the main file to `streamlit_app.py`.
+4. Add `GEMINI_API_KEY` in the app’s Secrets settings.
+5. Deploy and test with a sample CSV file.
 
-## Design Principles
+The API key should be added through the deployment platform’s secret manager, not committed to GitHub.
 
-### 1. Factual analysis before AI
+## Design principles
 
-Numerical calculations and statistical findings are generated programmatically rather than relying on an LLM.
-
-### 2. Local AI
-
-Ollama allows the AI functionality to run locally without requiring a paid external AI API.
-
-### 3. Dataset-aware responses
-
-Ask DataMind is designed to answer questions about the currently uploaded dataset rather than acting as a general-purpose chatbot.
-
-### 4. Explainability
-
-AI-generated responses are based on findings already calculated by the analysis pipeline.
-
-### 5. Simplicity
-
-The interface is designed to make common data-analysis tasks accessible without requiring users to write Python or SQL.
-
-
----
-
-## Project Goal
-
-DataMind was built to explore how traditional data-analysis workflows can be combined with local AI to create a more accessible and explainable data-analysis experience.
-
-The project focuses on an important distinction:
-
-> **AI should help explain data analysis, not replace the underlying analysis.**
-
----
+- **Verified calculations first:** Python performs the calculations.
+- **AI as an explainer:** Gemini explains results instead of inventing them.
+- **Dataset-aware answers:** Ask DataMind focuses on the uploaded dataset.
+- **Accessible analysis:** Common data-analysis workflows are available without Python or SQL.
 
 ## Author
 
-**Lipi Makwana**
-
-Data Science student interested in data analysis, AI, and practical software projects.
-
+**Lipi Makwana**  
 GitHub: [Lipi-Mak](https://github.com/Lipi-Mak)
